@@ -1,7 +1,8 @@
 import { authService } from './auth.service';
 import { Stock, CreateStockDto, TransferirStockDto } from '@shared/types';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/stock`;
+const BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8080/api';
+const API_URL = `${BASE_URL}/stock`;
 
 interface ApiResponse<T> {
   success: boolean;

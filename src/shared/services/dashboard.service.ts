@@ -1,7 +1,8 @@
 import { DashboardStats } from '@shared/types';
 import { authService } from './auth.service';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8080/api';
+const API_URL = BASE_URL;
 
 export const dashboardService = {
   getStats: async (): Promise<DashboardStats> => {

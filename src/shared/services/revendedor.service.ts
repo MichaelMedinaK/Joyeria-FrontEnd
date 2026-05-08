@@ -1,7 +1,8 @@
 import { authService } from './auth.service';
 import { Revendedor } from '@shared/types';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/revendedores`;
+const BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8080/api';
+const API_URL = `${BASE_URL}/revendedores`;
 
 interface ApiResponse<T> {
   success: boolean;

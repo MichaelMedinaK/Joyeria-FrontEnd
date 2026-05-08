@@ -8,7 +8,9 @@ import {
   BackendAuthResponse 
 } from '@shared/types';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/auth`;
+// Remover barra final si existe para evitar doble slash
+const BASE_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:8080/api';
+const API_URL = `${BASE_URL}/auth`;
 
 const mapBackendResponse = (backendResponse: BackendAuthResponse): AuthResponse => {
   return {
@@ -33,6 +35,12 @@ export const authService = {
         },
         body: JSON.stringify(credentials),
       });
+
+      // Verificar que la respuesta es JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('El servidor no está disponible o la URL de la API es incorrecta. Verifica que el backend esté corriendo en: ' + API_URL);
+      }
 
       if (!response.ok) {
         const error = await response.json();
@@ -61,6 +69,12 @@ export const authService = {
         },
         body: JSON.stringify(data),
       });
+
+      // Verificar que la respuesta es JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('El servidor no está disponible o la URL de la API es incorrecta. Verifica que el backend esté corriendo en: ' + API_URL);
+      }
 
       if (!response.ok) {
         const error = await response.json();
@@ -96,6 +110,12 @@ export const authService = {
         },
         body: JSON.stringify(data),
       });
+
+      // Verificar que la respuesta es JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('El servidor no está disponible o la URL de la API es incorrecta');
+      }
 
       if (!response.ok) {
         const error = await response.json();
