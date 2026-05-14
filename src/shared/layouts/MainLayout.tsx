@@ -3,6 +3,7 @@ import { authService } from '@shared/services';
 import { Sidebar, Header } from '@shared/components';
 
 export const MainLayout = () => {
+  // isAuthenticated() ya limpia el localStorage si el token está vencido
   const isAuthenticated = authService.isAuthenticated();
 
   if (!isAuthenticated) {

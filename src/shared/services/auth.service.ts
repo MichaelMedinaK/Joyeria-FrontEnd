@@ -140,6 +140,11 @@ export const authService = {
     localStorage.removeItem('user');
   },
 
+  clearAuth: (): void => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  },
+
   getCurrentUser: (): User | null => {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
@@ -154,7 +159,27 @@ export const authService = {
     localStorage.setItem('user', JSON.stringify(user));
   },
 
+  isTokenExpired: (): boolean => {
+    const token = localStorage.getItem('token');
+    if (!token) return true;
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+      if (!decoded.exp) return false;
+      // exp está en segundos, Date.now() en milisegundos
+      return decoded.exp < Math.floor(Date.now() / 1000);
+    } catch {
+      return true; // si no se puede decodificar, considerar expirado
+    }
+  },
+
   isAuthenticated: (): boolean => {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    if (authService.isTokenExpired()) {
+      authService.clearAuth();
+      return false;
+    }
+    return true;
   }
 };
